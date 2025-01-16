@@ -1,0 +1,101 @@
+﻿@model SV21T1020880.DomainModels.Customer
+@{
+    ViewBag.Title = "Thông tin cá nhân";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f1f2f6;
+        color: #333;
+    }
+
+    .profile-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #007bff;
+        text-align: center;
+    }
+
+    .form-label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-control-plaintext {
+        padding: 10px;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        color: #495057;
+        margin-bottom: 15px;
+    }
+
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem;
+    }
+
+    .btn-edit {
+        display: block;
+        width: 150px;
+        margin: 20px auto;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+        .btn-edit:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="container profile-container my-5">
+    <h1 class="mb-4">Thông tin cá nhân</h1>
+    <div class="row">
+        <!-- Họ và tên -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Họ và Tên:</label>
+            <p class="form-control-plaintext">@Model.CustomerName</p>
+        </div>
+        <!-- Tên giao dịch -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Tên giao dịch:</label>
+            <p class="form-control-plaintext">@Model.ContactName</p>
+        </div>
+        <!-- Email -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Email:</label>
+            <p class="form-control-plaintext">@Model.Email</p>
+        </div>
+        <!-- Số điện thoại -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Số điện thoại:</label>
+            <p class="form-control-plaintext">@Model.Phone</p>
+        </div>
+        <!-- Địa chỉ -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Địa chỉ:</label>
+            <p class="form-control-plaintext">@Model.Address</p>
+        </div>
+        <!-- Tỉnh/Thành -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Tỉnh/Thành:</label>
+            <p class="form-control-plaintext">@Model.Province</p>
+        </div>
+    </div>
+    <a href="@Url.Action("EditProfile", "Customer")" class="btn-edit">Chỉnh sửa</a>
+</div>

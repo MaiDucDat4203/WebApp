@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SV21T1020880.Shop</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/themes/css/normalize.css" />
+    <link rel="stylesheet" href="~/themes/css/vendor.css" />
+    <link rel="stylesheet" href="~/themes/style.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+</head>
+<body style="margin: 0; padding: 0;">
+    <!-- Header -->
+    <header style="margin: 0; padding: 0;">
+        @Html.Partial("_Header")
+    </header>
+
+    <!-- Banner -->
+    <br />
+    <section>
+        @Html.Partial("_Banner")
+    </section>
+    <br />
+
+    <!-- Main Content Area -->
+    <div class="container my-4">
+        <!-- Main Content -->
+        <main class="col-12">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin: 0; padding: 0; background-color: #ff8c00;">
+        @Html.Partial("_Footer")
+    </footer>
+
+    <!-- Scripts -->
+    <!-- jQuery 3 -->
+    <script src="~/themes/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/themes/bower_components/inputmask/dist/jquery.inputmask.bundle.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/themes/js/plugins.js"></script>
+    <script src="~/themes/js/script.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+
+    @RenderSection("scripts", false)
+</body>
+</html>

@@ -1,0 +1,105 @@
+﻿@using SV21T1020880.Shop.AppCodes
+@model SV21T1020880.Shop.Models.ProductSearchResult
+
+@{
+    Layout = null;
+}
+
+<div class="container py-4">
+    <div class="row">
+        @if (Model.Data.Any())
+        {
+            @foreach (var product in Model.Data)
+            {
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="position-relative">
+                            <img src="@WebConfig.IMAGE_SOURCE_HOST/images/products/@(string.IsNullOrWhiteSpace(product.Photo) ? "NoImages.png" : product.Photo)"
+                                 class="card-img-top" alt="@product.ProductName" loading="lazy" style="object-fit: cover; height: 200px;">
+                            <div class="badge bg-success position-absolute top-0 start-0 m-2">Mới</div>
+                        </div>
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-truncate">@product.ProductName</h5>
+                            <p class="card-text text-decoration-underline font-weight-bold" style="color: red; text-decoration-style: dashed">@product.Price.ToString("N0") VNĐ</p>
+                            <div class="d-flex justify-content-center">
+                                <a href="/Product/Details/@product.ProductID" class="btn btn-primary btn-sm me-2">
+                                    Xem
+                                </a>
+                                <button class="btn btn-warning btn-sm add-to-cart" data-id="@product.ProductID"
+                                        data-price="@product.Price" data-name="@product.ProductName">
+                                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <p class="text-muted">Không có sản phẩm nào phù hợp.</p>
+            </div>
+        }
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <ul class="pagination pagination-sm">
+            @for (int p = 1; p <= Model.PageCount; p++)
+            {
+                if (p <= 5 || p > Model.PageCount - 5 || Math.Abs(p - Model.Page) <= 2)
+                {
+                    if (p == Model.Page)
+                    {
+                        <li class="page-item active">
+                            <span class="page-link">@p</span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:;" onclick="doSearch(@p)">@p</a>
+                        </li>
+                    }
+                }
+                else if (p == 6 || p == Model.PageCount - 5)
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>
+
+
+<script>
+    $(".add-to-cart").click(function () {
+        var productId = $(this).data("id");
+        var productPrice = $(this).data("price");
+        var productName = $(this).data("name");
+
+        $.ajax({
+            url: "/Order/AddToCart",
+            method: "POST",
+            data: {
+                productId: productId,
+                quantity: 1,
+                salePrice: productPrice,
+                productName: productName
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                } else {
+                    alert("Thêm mặt hàng vào giỏ không thành công.");
+                }
+            },
+            error: function () {
+                alert("Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng!");
+                window.location.href = '/Account/Login'; 
+            }
+        });
+    });
+</script>

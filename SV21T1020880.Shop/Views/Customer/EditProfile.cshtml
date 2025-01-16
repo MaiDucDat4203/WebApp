@@ -1,0 +1,93 @@
+﻿@model SV21T1020880.DomainModels.Customer
+@{
+    ViewBag.Title = "Cập nhật thông tin khách hàng";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h3 class="card-title">Cập nhật thông tin khách hàng</h3>
+        </div>
+        <div class="card-body">
+            <form action="~/Customer/Save" method="post" class="form-horizontal">
+                <input type="hidden" name="CustomerId" value="@Model.CustomerId" />
+
+                <!-- Tên khách hàng -->
+                <div class="form-group row mb-3">
+                    <label class="col-md-3 col-sm-4 col-form-label text-md-end">Tên khách hàng:</label>
+                    <div class="col-md-9 col-sm-8">
+                        <input type="text" class="form-control" name="@nameof(Model.CustomerName)" 
+                               value="@Model.CustomerName" placeholder="Nhập tên khách hàng" required>
+                    </div>
+                </div>
+
+                <!-- Tên giao dịch -->
+                <div class="form-group row mb-3">
+                    <label class="col-md-3 col-sm-4 col-form-label text-md-end">Tên giao dịch:</label>
+                    <div class="col-md-9 col-sm-8">
+                        <input type="text" class="form-control" name="@nameof(Model.ContactName)" 
+                               value="@Model.ContactName" placeholder="Nhập tên giao dịch" required>
+                    </div>
+                </div>
+
+                <!-- Điện thoại -->
+                <div class="form-group row mb-3">
+                    <label class="col-md-3 col-sm-4 col-form-label text-md-end">Điện thoại:</label>
+                    <div class="col-md-9 col-sm-8">
+                        <input type="text" class="form-control" name="@nameof(Model.Phone)" 
+                               value="@Model.Phone" placeholder="Nhập số điện thoại" required>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group row mb-3">
+                    <label class="col-md-3 col-sm-4 col-form-label text-md-end">Email:</label>
+                    <div class="col-md-9 col-sm-8">
+                        <input type="email" class="form-control" name="@nameof(Model.Email)" 
+                               value="@Model.Email" placeholder="Nhập email" required>
+                    </div>
+                </div>
+
+                <!-- Địa chỉ -->
+                <div class="form-group row mb-3">
+                    <label class="col-md-3 col-sm-4 col-form-label text-md-end">Địa chỉ:</label>
+                    <div class="col-md-9 col-sm-8">
+                        <input type="text" class="form-control" name="@nameof(Model.Address)" 
+                               value="@Model.Address" placeholder="Nhập địa chỉ">
+                    </div>
+                </div>
+
+                <!-- Tỉnh/Thành -->
+                <div class="form-group row mb-4">
+                    <label class="col-md-3 col-sm-4 col-form-label text-md-end">Tỉnh/Thành:</label>
+                    <div class="col-md-9 col-sm-8">
+                        <select class="form-control" name="@nameof(Model.Province)">
+                            <option value="">--- Chọn Tỉnh/Thành ---</option>
+                            @foreach (var province in SV21T1020880.BusinessLayers.CommonDataService.ListOfProvinces())
+                            {
+                                if (province.ProvinceName == Model.Province)
+                                {
+                                    <option selected value="@province.ProvinceName">@province.ProvinceName</option>
+                                }
+                                else
+                                {
+                                    <option value="@province.ProvinceName">@province.ProvinceName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Nút Lưu và Quay lại -->
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-success btn-lg me-3">
+                        <i class="fa fa-save"></i> Lưu dữ liệu
+                    </button>
+                    <a href="~/Customer/Profile" class="btn btn-outline-secondary btn-lg">
+                        <i class="fa fa-arrow-left"></i> Quay lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

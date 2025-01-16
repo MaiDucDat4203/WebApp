@@ -1,0 +1,91 @@
+﻿@model OrderTrackingModel
+@{
+    ViewBag.Title = "Chi tiết đơn hàng";
+}
+<style>
+    .card-title {
+        font-size: 25px;
+        font-weight: 400;
+        font-family: 'Arial';
+    }
+    .card-text {
+        font-size: 18px;
+        font-weight: 600;
+        font-family: 'Arial';
+    }
+</style>
+<div class="container mt-5">
+    <h2 class="text-center">Chi tiết đơn hàng: @Model.OrderID</h2>
+    @if (TempData["SuccessMessage"] != null)
+    {
+            <div class="alert alert-success text-center">
+            @TempData["SuccessMessage"]
+            </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+            <div class="alert alert-danger text-center">
+            @TempData["ErrorMessage"]
+            </div>
+    }
+    <div class="card" style="background-color: antiquewhite">
+        <div class="card-body">
+            <h5 class="card-title">Thông tin giao hàng:</h5>
+            <p class="card-text">Tên khách hàng: @Model.CustomerName</p>
+            <p class="card-text">Thời gian tạo đơn hàng: @Model.OrderTime.ToString("dd/MM/yyyy HH:mm")</p>
+            <p class="card-text">Tỉnh/Thành phố: @Model.DeliveryProvince</p>
+            <p class="card-text">Địa chỉ giao hàng: @Model.DeliveryAddress</p>
+            <p class="card-text">Trạng thái đơn hàng: @Model.OrderStatus</p>
+            <hr />
+            <h5 class="mt-4">Chi tiết đơn hàng:</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        decimal total = 0;
+                        foreach (var item in Model.OrderDetails)
+                        {
+                            total += item.SalePrice * item.Quantity;
+                        }
+                    }
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                            <tr>
+                                <td>@item.ProductName</td>
+                                <td>@item.SalePrice.ToString("N0") VNĐ</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.TotalPrice.ToString("N0") VNĐ</td>
+                            </tr>
+                    }
+                    <tr>
+                        <td colspan="3" class="text-right font-weight-bold">Tổng cộng:</td>
+                        <td>@total.ToString("N0") VNĐ</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row">
+                <!-- Hiển thị nút hủy nếu trạng thái là "Chờ duyệt" -->                
+                <div class="col-6 d-flex justify-content-between">
+                     <a href="/" class="btn btn-primary">Quay lại mua hàng</a>
+                </div>
+                <div class="col-6 text-end">
+                    @if (Model.OrderStatus == "Đơn hàng mới. Đang chờ duyệt")
+                    {
+                            <a href="@Url.Action("Cancel", "Order", new { id = Model.OrderID })"
+                               class="btn btn-danger"
+                               onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này?');">
+                                Hủy đơn hàng
+                            </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

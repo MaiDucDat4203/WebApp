@@ -1,0 +1,175 @@
+﻿@model SV21T1020880.DomainModels.Product
+@using SV21T1020880.Shop.AppCodes
+@using static SV21T1020880.BusinessLayers.CommonDataService
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+
+    var suppliers = ListOfSuppliers();
+    var categories = ListOfCategorys();
+    var supplierName = suppliers.FirstOrDefault(s => s.SupplierID == Model.SupplierID)?.SupplierName ?? "Không xác định";
+    var categoryName = categories.FirstOrDefault(c => c.CategoryID == Model.CategoryID)?.CategoryName ?? "Không xác định";
+}
+
+<div class="container my-5">
+    <div class="row">
+        <!-- Hình ảnh sản phẩm -->
+        <div class="col-md-5">
+            @if (!string.IsNullOrEmpty(Model.Photo))
+            {
+                <img src="@WebConfig.IMAGE_SOURCE_HOST/images/products/@Model.Photo" class="img-fluid rounded" alt="@Model.ProductName" />
+            }
+            else
+            {
+                <img src="@WebConfig.IMAGE_SOURCE_HOST/images/products/NoImages.png" class="img-fluid rounded" alt="No image available" />
+            }
+
+            <!-- Thư viện ảnh sản phẩm -->
+            <div class="mt-4">
+                <h5>Thư viện ảnh:</h5>
+                <div class="row">
+                    @foreach (var photo in SV21T1020880.BusinessLayers.ProductDataService.ListPhotos(Model.ProductID))
+                    {
+                        <div class="col-4 mb-3">
+                            <img src="@WebConfig.IMAGE_SOURCE_HOST/images/products/@photo.Photo"
+                                 alt="@photo.Description"
+                                 class="img-thumbnail"
+                                 style="max-width: 100%;" />
+                            <small>@photo.Description</small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Thông tin sản phẩm -->
+        <div class="col-md-7">
+            <h1 class="display-5">@Model.ProductName</h1>
+
+            <h3 class="price text-decoration-underline text-start">@Model.Price.ToString("N0") VNĐ</h3>
+            <p class="text-success fw-bold">
+                @(Model.IsSelling ? "Còn hàng" : "Hết hàng")
+            </p>
+
+            <div class="mt-4">
+                <h5>Mô tả sản phẩm:</h5>
+                <p>@(!string.IsNullOrEmpty(Model.ProductDescription) ? Model.ProductDescription : "Không có mô tả.")</p>
+            </div>
+
+            <div class="mt-4">
+                <!-- Trường nhập số lượng -->
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Số lượng:</label>
+                    <input type="number" id="quantity" class="form-control" min="1" value="1" required />
+                </div>
+
+                <!-- Nút thêm vào giỏ hàng -->
+                <button id="add-to-cart" class="btn btn-primary btn-lg">
+                    <i class="bi bi-cart-fill"></i> Thêm vào giỏ hàng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thông tin bổ sung -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3>Thông tin chi tiết</h3>
+            <table class="table table-striped">
+                <tbody>                    
+                    <tr>
+                        <th>Nhà cung cấp:</th>
+                        <td>@supplierName</td>
+                    </tr>
+                    <tr>
+                        <th>Loại sản phẩm:</th>
+                        <td>@categoryName</td>
+                    </tr>
+                    <tr>
+                        <th>Giá sản phẩm:</th>
+                        <td>@Model.Price.ToString("N0") VNĐ</td>
+                    </tr>
+                    <tr>
+                        <th>Hình thức:</th>
+                        <td>@Model.Unit</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Thuộc tính sản phẩm -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3>Thuộc tính sản phẩm</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Tên thuộc tính</th>
+                        <th>Giá trị</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var attributes = SV21T1020880.BusinessLayers.ProductDataService.ListAttributes(Model.ProductID);
+                        if (attributes.Any())
+                        {
+                            foreach (var productattribute in attributes)
+                            {
+                                <tr>
+                                    <td>@productattribute.AttributeName</td>
+                                    <td>@productattribute.AttributeValue</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2" class="text-center">Sản phẩm chưa có thuộc tính</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-between">
+            <a href="~/Product" class="btn btn-primary">Quay lại mua hàng</a>
+        </div>        
+    </div>
+</div>
+
+<!-- AJAX Script -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#add-to-cart").click(function () {
+                var quantity = $("#quantity").val();
+                var productId = "@Model.ProductID";
+                var salePrice = "@Model.Price";
+                var productName = "@Html.Raw(Model.ProductName)";
+
+                $.ajax({
+                    url: "/Order/AddToCart",
+                    type: "POST",
+                    data: {
+                        productId: productId,
+                        quantity: quantity,
+                        salePrice: salePrice,
+                        productName: productName
+                    },
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                        } else {
+                            alert("Thêm mặt hàng vào giỏ thành công.");
+                        }
+                    },
+                    error: function () {
+                        alert("Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng.");
+                        window.location.href = '/Account/Login';
+                    }
+                });
+            });
+        });
+    </script>
+}

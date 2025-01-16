@@ -1,0 +1,119 @@
+﻿@model SV21T1020880.Web.Models.PaginationSearchInput
+@{
+    ViewBag.Title = "Quản lý mặt hàng";
+}
+<div class="box box-primary">
+    <div class="box-body">
+        <form id="frmSearchInput" action="~/Product/Search" method="get" data-container="#searchResult">    
+
+            <input type="hidden" name="@nameof(Model.PageSize)" value="@Model.PageSize" />
+
+            <div class="form-group row">
+                <div class="col-xs-3">
+                    <label class="form-label">Loại hàng: </label> <br />
+                    <select class="form-control" name="@nameof(Model.CategoryID)">
+                        <option>-- Chọn loại hàng --</option>
+                        @foreach (var item in SV21T1020880.BusinessLayers.CommonDataService.ListOfCategorys())
+                        {
+                            if (item.CategoryID == Model.CategoryID)
+                            {
+                                <option selected value="@item.CategoryID">@item.CategoryName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.CategoryID">@item.CategoryName</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-xs-3">
+                    <label>Nhà cung cấp: </label> <br />
+                    <select class="form-control" name="@nameof(Model.SupplierID)">
+                        <option>-- Chọn nhà cung cấp --</option>
+                        @foreach (var item in SV21T1020880.BusinessLayers.CommonDataService.ListOfSuppliers())
+                        {
+                            if (item.SupplierID == Model.SupplierID)
+                            {
+                                <option selected value="@item.SupplierID">@item.SupplierName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.SupplierID">@item.SupplierName</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-xs-1">
+                    <label>Giá từ: </label>
+                    <input class="form-control number-separator text-left tooltip-price" 
+                    type="text" name="@nameof(Model.MinPrice)" 
+                    value="@Model.MinPrice" autocomplete="off" min="0" />
+                </div>
+                <div class="col-xs-1">
+                    <label>đến: </label>
+                    <input class="form-control number-separator text-left tooltip-price" 
+                    type="text" name="@nameof(Model.MaxPrice)" 
+                    value="@Model.MaxPrice" autocomplete="off" min="0" />
+                </div>
+                <div class="col-xs-4">
+                    <label>Tên mặt hàng cần tìm: </label>
+                    <div class="input-group">
+                        <input name="@nameof(Model.SearchValue)" type="text" class="form-control"
+                               placeholder="Nhập tên mặt hàng cần tìm..." style="width:100%;height: 35px" autofocus />
+                        <div class="input-group-btn">
+                            <button class="btn btn-info" type="submit">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                            <a href="~/Product/Create" class="btn btn-primary" style="margin-left:5px">
+                                <i class="fa fa-plus"></i>  
+                                <span>Bổ sung</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!--Hien thi ket qua tim kiem-->
+        <div id="searchResult">
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        function doSearch(page) {
+            var searchCondition = $("#frmSearchInput").serializeArray();
+            searchCondition.push({ name: "page", value: page });
+
+            var action = $("#frmSearchInput").prop("action");
+            var method = $("#frmSearchInput").prop("method");
+
+            $.ajax({
+                url: action,
+                type: method,
+                data: searchCondition,
+                success: function (data) {
+                    $("#searchResult").html(data);
+                }
+            });
+        }
+        $(document).ready(function () {
+            doSearch(@Model.Page);
+            $("#frmSearchInput").submit(function (e) {
+                e.preventDefault();
+                doSearch(1);
+            });
+
+            $('.number-separator').inputmask({
+                alias: "numeric",
+                groupSeparator: ",",       
+                autoGroup: true,       
+                digits: 0,                
+                rightAlign: false,         
+                removeMaskOnSubmit: true   
+            });
+        });
+    </script>
+}

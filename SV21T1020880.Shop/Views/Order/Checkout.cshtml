@@ -1,0 +1,83 @@
+﻿@model OrderCheckoutModel
+@{
+    ViewBag.Title = "Thông tin giao hàng";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Thông tin đặt hàng</h2>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success text-center">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger text-center">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+    <form asp-action="Init" method="post">
+        <input type="hidden" name="CustomerID" value="@Model.CustomerID" />
+
+        <!-- Hiển thị thông tin giao hàng -->
+        <div class="form-group">
+            <label>Tỉnh/Thành phố:</label>
+            <select class="form-control" name="DeliveryProvince">
+                <option value="">--- Chọn Tỉnh/Thành ---</option>
+                @foreach (var province in SV21T1020880.BusinessLayers.CommonDataService.ListOfProvinces())
+                {
+                    <option value="@province.ProvinceName">@province.ProvinceName</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Địa chỉ giao hàng:</label>
+            <input type="text" class="form-control" name="DeliveryAddress" value="@Model.DeliveryAddress" placeholder="Nhập địa chỉ cụ thể" required />
+        </div>
+
+        <!-- Hiển thị danh sách mặt hàng -->
+        <h3 class="mt-4">Danh sách mặt hàng</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.CartItems.Count > 0)
+                {
+                    decimal total = 0;
+                    foreach (var item in Model.CartItems)
+                    {
+                        decimal thanhTien = item.SalePrice * item.Quantity;
+                        total += thanhTien;
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@item.SalePrice.ToString("N0") VNĐ</td>
+                            <td>@item.Quantity</td>
+                            <td>@thanhTien.ToString("N0") VNĐ</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="3" class="text-right font-weight-bold">Tổng cộng:</td>
+                        <td>@total.ToString("N0") VNĐ</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center">Không có mặt hàng nào trong giỏ hàng</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Xác nhận</button>
+            <a href="~/Order/ShoppingCart" class="btn btn-primary btn-danger">Hủy</a>
+        </div>        
+    </form>
+</div>

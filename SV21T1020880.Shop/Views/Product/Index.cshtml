@@ -1,0 +1,94 @@
+﻿@model SV21T1020880.Shop.Models.PaginationSearchInput
+
+@{
+    ViewData["Title"] = "Chào mừng đến với MDDatShop";
+}
+
+<div class="container my-4">
+    <!-- Bộ lọc sản phẩm -->
+    <div class="row mb-4" style="background-color: orange">
+        <div class="col-12">
+            <form id="frmSearchInput" class="d-flex justify-content-between mb-4" action="~/Product/Search" method="get" data-container="#searchResult" data-page="@Model.Page">
+                <input type="hidden" name="@nameof(Model.PageSize)" value="@Model.PageSize" />
+                <div class="form-group me-2">
+                    <label for="SearchValue">Tên mặt hàng cần tìm:</label>
+                    <input name="@nameof(Model.SearchValue)" type="text" class="form-control" placeholder="Nhập tên mặt hàng cần tìm..." />
+                </div>
+                <div class="form-group me-2">
+                    <label for="MinPrice">Giá từ:</label>
+                    <input type="text" class="form-control number-separator" name="@nameof(Model.MinPrice)" min="0" placeholder="Giá từ" />
+                </div>
+                <div class="form-group me-2">
+                    <label for="MaxPrice">Giá đến:</label>
+                    <input type="text" class="form-control number-separator" name="@nameof(Model.MaxPrice)" min="0" placeholder="Giá đến" />
+                </div>
+                <div class="form-group me-2">
+                    <label class="form-label">Loại hàng: </label>
+                    <select class="form-control" name="@nameof(Model.CategoryID)">
+                        <option>-- Chọn loại hàng --</option>
+                        @foreach (var item in SV21T1020880.BusinessLayers.CommonDataService.ListOfCategorys())
+                        {
+                            if (item.CategoryID == Model.CategoryID)
+                            {
+                                <option selected value="@item.CategoryID">@item.CategoryName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.CategoryID">@item.CategoryName</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group align-self-end">
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Kết quả tìm kiếm -->
+    <div id="searchResult" class="row g-3">
+        <!-- Danh sách sản phẩm -->
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/themes/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/themes/bower_components/inputmask/dist/jquery.inputmask.bundle.js"></script>
+    <script>
+        // Hàm tìm kiếm AJAX
+        function doSearch(page) {
+            const searchCondition = $("#frmSearchInput").serializeArray();
+            searchCondition.push({ name: "page", value: page });
+
+            $.ajax({
+                url: $("#frmSearchInput").prop("action"),
+                type: $("#frmSearchInput").prop("method"),
+                data: searchCondition,
+                success: function (data) {
+                    $("#searchResult").html(data);
+                },
+                error: function () {
+                    $("#searchResult").html("<p class='text-danger'>Không thể tải dữ liệu. Vui lòng thử lại sau.</p>");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            doSearch($("#frmSearchInput").data("page"));
+            $("#frmSearchInput").submit(function (e) {
+                e.preventDefault();
+                doSearch(1);
+            });
+
+            Inputmask({
+                alias: "numeric",
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 0,
+                rightAlign: false,
+                removeMaskOnSubmit: true
+            }).mask('.number-separator');
+        });
+    </script>
+}

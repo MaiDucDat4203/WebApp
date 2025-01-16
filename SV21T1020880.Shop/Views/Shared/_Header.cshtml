@@ -1,0 +1,110 @@
+﻿<header>
+    <nav class="navbar navbar-expand-lg navbar-light"
+         style="background: linear-gradient(90deg, #ff8c00, #ff6a00); padding: 10px 20px;">
+        <div class="container d-flex align-items-center justify-content-between">
+            <!-- Logo -->
+            <a class="navbar-brand text-white fw-bold d-flex align-items-center" href="/">
+                <i class="fa fa-store me-2"></i> MDDatShop
+            </a>
+
+            <!-- Toggle button for mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto d-flex align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-bold" href="/">
+                            <i class="fa fa-home"></i> Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-bold" href="/Order/OrderList">
+                            <i class="fa fa-truck"></i> Lịch sử mua hàng
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav d-flex align-items-center">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var userData = User.GetUserData();
+                            if (userData != null)
+                            {
+                                <li class="nav-item dropdown" >
+                                    <a href="#" class="nav-link text-white fw-bold dropdown-toggle" id="userDropdown"
+                                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-user-circle"></i> @userData.DisplayName
+                                    </a>
+                                    <ul class="dropdown-menu text-center" aria-labelledby="userDropdown" style="background-color: #ffebcd;">
+                                        <li class="dropdown-header text-center">
+                                            <p class="mt-2 mb-2" style="font-size: 20px;">
+                                                <b>Khách hàng:</b>
+                                                <b>@userData.DisplayName</b>
+                                            </p>
+                                        </li>
+                                        <li class="dropdown-divider"></li> 
+                                        <li class="text-center mb-2">
+                                            <a href="~/Customer/Profile" class="btn btn-info">Thông tin chi tiết</a>
+                                        </li>
+                                        <li class="d-flex justify-content-between" style="margin: 5px;">
+                                            <a href="~/Account/ChangePassword" class="btn btn-secondary btn-sm me-1 flex-fill">Đổi mật khẩu</a>
+                                            <a href="~/Account/Logout" class="btn btn-danger btn-sm ms-1 flex-fill">Đăng xuất</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            }
+                        }
+                        else
+                        {
+                            <!-- Hiển thị Đăng nhập và Đăng ký -->
+                            <li class="nav-item me-3">
+                                <a class="nav-link text-white fw-bold" href="/Account/Login">
+                                    <i class="fa fa-sign-in-alt"></i> Đăng nhập
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-bold" href="/Account/Register">
+                                    <i class="fa fa-user-plus"></i> Đăng ký
+                                </a>
+                            </li>
+                        }
+
+                        <!-- Giỏ hàng -->
+                        <li class="nav-item ms-3">
+                            <a class="nav-link text-white fw-bold" href="/Order/ShoppingCart">
+                                <i class="fa fa-shopping-cart"></i> Giỏ hàng
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<style>
+    .navbar {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Tạo bóng đổ */
+    }
+
+    .nav-link {
+        margin-right: 10px;
+        transition: color 0.3s ease-in-out;
+    }
+
+        .nav-link:hover {
+            color: #ffebcd; /* Hiệu ứng hover */
+        }
+
+    .dropdown-menu {
+        border-radius: 8px; /* Bo góc dropdown */
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Bóng đổ */
+        box-sizing: content-box;
+    }
+</style>

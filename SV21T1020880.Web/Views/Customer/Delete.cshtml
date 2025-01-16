@@ -1,0 +1,52 @@
+﻿
+@model SV21T1020880.DomainModels.Customer
+@{
+    ViewBag.Title = "Xóa khách hàng";
+}
+<div class="box box-danger">
+    <div class="box-body">
+        <form action="~/Customer/Delete/@Model.CustomerId" method="post">
+            <div class="form-group">
+                <label>Tên khách hàng:</label>
+                <p class="form-control-static form-control">@Model.CustomerName</p>
+            </div>
+            <div class="form-group">
+                <label>Tên hợp đồng:</label>
+                <p class="form-control-static form-control">@Model.ContactName</p>
+            </div>
+            <div class="form-group">
+                <label>Điện thoại:</label>
+                <p class="form-control-static form-control">@Model.Phone</p>
+            </div>
+            <div class="form-group">
+                <label>Địa chỉ:</label>
+                <p class="form-control-static form-control">@Model.Address</p>
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <p class="form-control-static form-control">@Model.Email</p>
+            </div>
+            <div class="form-group">
+                <label>Tỉnh/thành:</label>
+                <p class="form-control-static form-control">@Model.Province</p>
+            </div>
+            <div class="form-group">
+                <label>Bị khóa?:</label>
+                <p class="form-control-static form-control">
+                    @(Model.IsLocked ? "Tài khoản bị khóa" : "Tài khoản đang hoạt động ")
+                </p>
+            </div>
+            <div class="form-group text-right">
+                @if (!SV21T1020880.BusinessLayers.CommonDataService.InUsedCustomer(Model.CustomerId))
+                {
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash"></i> Xác nhận xóa
+                    </button>
+                }
+                <a href="~/Customer" class="btn btn-default">
+                    Quay lại
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

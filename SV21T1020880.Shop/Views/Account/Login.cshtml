@@ -1,0 +1,169 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>MDDatShop - Đăng nhập</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="~/themes/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/themes/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/themes/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/themes/dist/css/AdminLTE.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/themes/plugins/iCheck/square/blue.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+    <style>
+        body.hold-transition.login-page {
+            background-color: #fff; /* Nền cam nhạt */
+            color: #333; /* Màu chữ mặc định */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .banner-container {
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin: 35px;
+        }
+
+        .banner-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .login-box {
+            width: 600px; /* Điều chỉnh độ rộng */
+            height: auto;
+            padding: 40px;
+            background: #FFCC66;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-logo a {
+            color: #FF4500; /* Màu cam đậm */
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .login-box-msg {
+            color: #FF4500; /* Màu cam đậm */
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .login-box-body {
+            color: #FFFFCC;
+            border-radius: 10px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            padding: 15px;
+            border: 1px solid #FFA500; /* Viền cam */
+        }
+
+            .form-control:focus {
+                border-color: #FF4500; /* Viền cam đậm khi focus */
+                box-shadow: 0 0 5px #FF4500;
+            }
+
+        .btn-primary {
+            background-color: #FF4500; /* Nền nút cam đậm */
+            border-color: #FF4500; /* Viền nút cam đậm */
+            color: #fff;
+            border-radius: 10px;
+            padding: 10px 20px; /* Điều chỉnh padding để tăng không gian cho chữ */
+            font-size: 16px; /* Tăng kích thước chữ */
+            text-align: center;
+            line-height: 1.5; /* Cân chỉnh chiều cao nội dung */
+            display: inline-block;
+            width: 100%; /* Đảm bảo nút rộng vừa đủ trong cột */
+            overflow: hidden;
+        }
+
+            .btn-primary:hover {
+                background-color: #E63900; /* Màu cam đậm hơn khi hover */
+                border-color: #E63900;
+            }
+
+        .glyphicon-user,
+        .glyphicon-lock {
+            color: #FFA500; /* Icon màu cam */
+        }
+    </style>
+</head>
+<body class="hold-transition login-page">
+
+    @if (ViewBag.Success != null)
+    {
+        <div class="signup-alert-success">
+            @ViewBag.Success
+        </div>
+    }
+
+    <div class="login-box">
+        <div class="login-logo">
+            <a><b>MDDatShop</b></a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">Đăng nhập</p>
+
+            <form action="~/Account/Login" method="post">
+                @Html.AntiForgeryToken()
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" autofocus
+                           placeholder="Tên đăng nhập"
+                           name="username" value="@ViewBag.Username">
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" placeholder="Mật khẩu" name="password">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+
+                <div class="row center-block">
+                    <div class="col-xs-8">
+                        @Html.ValidationMessage("Error", new { @style = "color:#f00" })
+                    </div>
+                    <!-- /.col -->
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery 3 -->
+    <script src="~/themes/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="~/themes/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
