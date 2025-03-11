@@ -63,7 +63,7 @@ namespace SV21T1020880.Shop
                     context: app.Services.GetRequiredService<IHttpContextAccessor>(),
                     enviroment: app.Services.GetRequiredService<IWebHostEnvironment>()
                 );
-            string connectionString = builder.Configuration.GetConnectionString("LiteCommerceDB");
+            string connectionString = builder.Configuration.GetConnectionString("MaiDucDat_WebDB");
             SV21T1020880.BusinessLayers.Configuration.Initialize(connectionString);
 
             app.Run();
